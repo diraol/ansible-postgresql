@@ -37,6 +37,9 @@
     group: "{{ postgresql_user_name }}"
     mode: 0755
 
+- debug:
+    msg: "postgresql_version: {{ postgresql_version }}"
+
 # lineinfile's behavior when `backrefs = True` is very odd. We don't want to overwrite include_dirs if it's already
 # properly set, but we don't know the exact format it will be in (with or without '=', with a comment at end of line,
 # etc.). So check for a match first and then add if there's no match.
@@ -51,7 +54,7 @@
   check_mode: true
   changed_when: __postgresql_include_dir_result is not changed  # yeah...
   register: __postgresql_include_dir_result
-  when: postgresql_version is version('9.3', '>=')
+  when: postgresql_version is version("9.3", '>=')
 
 - name: Set conf.d include in postgresql.conf
   lineinfile:
